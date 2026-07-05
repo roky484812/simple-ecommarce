@@ -38,13 +38,23 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <a
-                        href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
+                    @php
+                        $cartItemCount = app(\App\Services\CartService::class)->totalQty(auth()->user(), session()->getId());
+                    @endphp
+                    <button
+                        type="button"
+                        x-data
+                        @click="$dispatch('open-cart-drawer')"
                         class="relative inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200"
-                        aria-label="Cart"
+                        aria-label="Cart{{ $cartItemCount > 0 ? " ({$cartItemCount} items)" : '' }}"
                     >
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" /></svg>
-                    </a>
+                        @if ($cartItemCount > 0)
+                            <span class="absolute -top-1 -right-1 flex items-center justify-center min-w-[1.1rem] h-[1.1rem] px-1 rounded-full bg-brand-600 text-white text-[10px] font-semibold leading-none">
+                                {{ $cartItemCount }}
+                            </span>
+                        @endif
+                    </button>
 
                     @auth
                         <div class="dropdown dropdown-end">
@@ -100,6 +110,23 @@
     <main>
         @yield('content')
     </main>
+
+    <livewire:storefront.cart-drawer />
+
+    <x-ui.toast-container />
+
+    @if (session('success') || session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                window.dispatchEvent(new CustomEvent('toast', {
+                    detail: {
+                        message: @json(session('success') ?? session('error')),
+                        variant: @json(session('success') ? 'success' : 'error'),
+                    },
+                }));
+            });
+        </script>
+    @endif
 
     <footer class="bg-white border-t border-gray-200 mt-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

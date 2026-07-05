@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Storefront\CartController;
 use App\Http\Controllers\Storefront\HomeController;
 use App\Http\Controllers\Storefront\ProductController as StorefrontProductController;
 use App\Models\Category;
@@ -16,6 +17,11 @@ Route::get('/products/{product:slug}', [StorefrontProductController::class, 'sho
 Route::get('/categories/{category:slug}', function (Category $category) {
     return redirect()->route('products.index', ['category' => $category->slug]);
 })->name('categories.show');
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+Route::patch('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

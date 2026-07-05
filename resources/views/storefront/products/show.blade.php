@@ -88,29 +88,9 @@
                 @endif
 
                 <!-- Add to cart -->
-                <form
-                    method="POST"
-                    action="{{ Route::has('cart.store') ? route('cart.store') : '#' }}"
-                    class="mt-8 flex items-center gap-3"
-                >
-                    @csrf
-                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-
-                    <input
-                        type="number"
-                        name="qty"
-                        value="1"
-                        min="1"
-                        max="{{ $product->stock_qty }}"
-                        class="input w-20"
-                        @disabled(! $product->isInStock())
-                        aria-label="Quantity"
-                    >
-
-                    <x-ui.button type="submit" variant="primary" size="lg" class="flex-1" :disabled="! $product->isInStock()">
-                        {{ $product->isInStock() ? 'Add to cart' : 'Out of stock' }}
-                    </x-ui.button>
-                </form>
+                <div class="mt-8">
+                    <livewire:storefront.add-to-cart-form :product="$product" :key="'add-to-cart-'.$product->id" />
+                </div>
 
                 <!-- Shopping instructions -->
                 <div class="join join-vertical w-full mt-6 bg-base-100">

@@ -317,15 +317,22 @@ tests, so it can be verified independently before moving to the next.
 **Frontend**
 - `resources/views/storefront/cart.blade.php` — full cart page, qty steppers, remove buttons
 - `resources/views/components/storefront/cart-drawer.blade.php` (class-based component, Livewire-free — reloads via small fetch+DOM update or full page nav, keep it simple with Blade + form submits) — mini-cart icon badge in navbar
+  - **Deviation:** implemented as Livewire single-file components instead
+    (`storefront.add-to-cart-form`, `storefront.cart-page`, `storefront.cart-badge`,
+    `storefront.cart-drawer`) so add-to-cart stays on the same page, the cart
+    icon opens a slide-out drawer instead of navigating, and cart qty changes
+    auto-save without a page reload, per updated requirements. A shared
+    `<x-ui.toast-container>` (Alpine-powered) shows success/error toasts
+    dispatched from these components.
 
 **Routes**
 - `GET /cart`, `POST /cart`, `PATCH /cart/{cartItem}`, `DELETE /cart/{cartItem}`
 
 **Definition of Done**
-- [ ] Pest: guest add-to-cart persists in Redis and survives across requests (same session)
-- [ ] Pest: logging in merges guest cart into DB cart, no duplicate items (qty summed)
-- [ ] Pest: cannot add more than `stock_qty` to cart
-- [ ] Cart drawer/page responsive, works with keyboard/touch
+- [x] Pest: guest add-to-cart persists in Redis and survives across requests (same session)
+- [x] Pest: logging in merges guest cart into DB cart, no duplicate items (qty summed)
+- [x] Pest: cannot add more than `stock_qty` to cart
+- [x] Cart drawer/page responsive, works with keyboard/touch
 
 ---
 
