@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -36,7 +38,18 @@ class DatabaseSeeder extends Seeder
         Category::factory()->childOf($electronics)->create(['name' => 'Smartphones', 'slug' => 'smartphones']);
 
         $fashion = Category::factory()->create(['name' => 'Fashion', 'slug' => 'fashion']);
-        Category::factory()->childOf($fashion)->create(['name' => "Men's Clothing", 'slug' => 'mens-clothing']);
-        Category::factory()->childOf($fashion)->create(['name' => "Women's Clothing", 'slug' => 'womens-clothing']);
+        $mensClothing = Category::factory()->childOf($fashion)->create(['name' => "Men's Clothing", 'slug' => 'mens-clothing']);
+        $womensClothing = Category::factory()->childOf($fashion)->create(['name' => "Women's Clothing", 'slug' => 'womens-clothing']);
+
+        // Products: ~30 demo products spread across the categories above,
+        // each with a couple of placeholder images.
+        $categories = [$electronics, $mensClothing, $womensClothing];
+
+        foreach ($categories as $category) {
+            Product::factory(10)
+                ->for($category)
+                ->has(ProductImage::factory()->count(2), 'images')
+                ->create();
+        }
     }
 }

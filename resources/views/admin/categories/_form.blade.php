@@ -35,6 +35,7 @@
 
 <fieldset class="fieldset">
     <label class="label cursor-pointer justify-start gap-3">
+        <input type="hidden" name="is_active" value="0" />
         <input
             type="checkbox"
             name="is_active"

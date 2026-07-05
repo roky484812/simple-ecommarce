@@ -4,11 +4,13 @@
     'error' => null,
     'options' => [],
     'placeholder' => null,
+    'value' => null,
 ])
 
 @php
     $selectId = $attributes->get('id', $name);
     $hasError = $error ?? $errors->first($name);
+    $currentValue = old($name, $value);
 @endphp
 
 <fieldset class="fieldset">
@@ -19,19 +21,19 @@
     <select
         name="{{ $name }}"
         id="{{ $selectId }}"
-        {{ $attributes->except(['id'])->class([
+        {{ $attributes->except(['id', 'value'])->class([
             'select w-full',
             'select-error' => $hasError,
         ]) }}
     >
         @if ($placeholder)
-            <option value="" disabled selected>{{ $placeholder }}</option>
+            <option value="" @selected(blank($currentValue))>{{ $placeholder }}</option>
         @endif
 
         {{ $slot }}
 
-        @foreach ($options as $value => $text)
-            <option value="{{ $value }}">{{ $text }}</option>
+        @foreach ($options as $optionValue => $text)
+            <option value="{{ $optionValue }}" @selected((string) $currentValue === (string) $optionValue)>{{ $text }}</option>
         @endforeach
     </select>
 

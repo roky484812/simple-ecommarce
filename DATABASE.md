@@ -12,7 +12,9 @@
 Engine: **MySQL 8**, `InnoDB`, `utf8mb4_unicode_ci`.
 Conventions: every table has `id` (unsigned bigint, PK), `created_at`/
 `updated_at`; soft-deletable tables also get `deleted_at`. Money columns are
-`decimal(10,2)`. All foreign keys are indexed and `ON DELETE` behavior is
+`decimal(10,2)`, storing plain **BDT (Bangladeshi Taka, ৳)** amounts — see
+`PLAN.md` §3 Currency; there is no multi-currency support or minor-unit
+conversion. All foreign keys are indexed and `ON DELETE` behavior is
 specified per relationship below.
 
 ## 1. Entity Relationship Overview
@@ -141,7 +143,7 @@ orders ──1:N── order_status_histories
 | created_at / updated_at | timestamp | | |
 
 > Guest carts live in **Redis** as `cart:{session_id}` (JSON-encoded item
-> list), not in these tables — see `PLAN.md` §3 Redis Usage Map. These tables
+> list), not in these tables — see `PLAN.md` §4 Redis Usage Map. These tables
 > are only populated once a cart belongs to an authenticated `user_id`.
 
 ### 2.9 `orders` *(Module 7)*

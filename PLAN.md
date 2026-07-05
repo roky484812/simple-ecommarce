@@ -27,10 +27,23 @@ features, queue-driven heavy tasks, and a live deployment.
 | Queue | Redis + Laravel Queue (`horizon` optional) | Required by brief for heavy/background tasks |
 | Concurrency | `Illuminate\Support\Facades\Concurrency` | Required by brief for parallelizable read work (dashboard aggregates) |
 | Payments | **SSLCommerz** (sandbox mode) | Required by brief; leading BD payment aggregator (cards, mobile banking, net banking) |
+| Currency | **BDT (Bangladeshi Taka, ৳)** | Matches SSLCommerz's home market; all `products`/`orders`/`payments` monetary columns are Taka amounts, displayed with the `৳` symbol via the `<x-ui.money>` component |
 | Testing | Pest v4 | Already installed |
 | Deployment | Laravel Cloud (or Forge/VPS) | Needs to be a live URL per brief |
 
-## 3. Redis Usage Map
+## 3. Currency
+
+The application's only supported currency is **BDT (Bangladeshi Taka)**, symbol
+**৳**. There is no multi-currency support — all `decimal(10,2)` money columns
+(`products.price`/`sale_price`, `cart_items.price_snapshot`,
+`orders.subtotal`/`tax`/`shipping`/`total`, `payments.amount`, etc.) are stored
+as plain Taka amounts (no minor-unit/cents conversion). Display formatting
+goes through the shared `<x-ui.money :value="$amount" />` Blade component
+(`resources/views/components/ui/money.blade.php`), which renders `৳1,234.50`
+via `number_format()`. SSLCommerz is configured with `currency=BDT` when
+integrated in Module 7.
+
+## 4. Redis Usage Map
 
 Redis will back four distinct concerns (separate logical connections/DB indexes):
 
@@ -57,7 +70,7 @@ REDIS_PORT=6379
 Requires `predis/predis` (or `phpredis` extension) — needs approval before adding
 to `composer.json` per project conventions.
 
-## 4. Payment Integration — SSLCommerz
+## 5. Payment Integration — SSLCommerz
 
 No official Laravel package is well-maintained (only small single-maintainer
 community packages with low adoption — a supply-chain risk for a dependency).
@@ -104,7 +117,7 @@ SSLCOMMERZ_SANDBOX=true
   exceptions (SSLCommerz posts without a CSRF token)
 
 
-## 5. How to Use This Plan
+## 6. How to Use This Plan
 
 Each module below is **self-contained**: it lists exactly which migrations,
 models, services, controllers, routes, Blade views/components, and tests
@@ -237,9 +250,9 @@ tests, so it can be verified independently before moving to the next.
 - `Route::resource('admin/products', Admin\ProductController::class)`
 
 **Definition of Done**
-- [ ] Pest: create product with images, verify files stored under `storage/app/public`
-- [ ] Pest: `StockService::decrement()` triggers `RestockNotification` job when crossing threshold (use `Queue::fake()`)
-- [ ] Responsive form and table
+- [x] Pest: create product with images, verify files stored under `storage/app/public`
+- [x] Pest: `StockService::decrement()` triggers `RestockNotification` job when crossing threshold (use `Queue::fake()`)
+- [x] Responsive form and table
 
 ---
 
@@ -500,7 +513,7 @@ migration order in §4, not this module numbering, since `orders` depends on
 
 ---
 
-## 6. Open Decisions Needing Approval
+## 7. Open Decisions Needing Approval
 
 - Adding `predis/predis` to `composer.json`
 - Adding `laravel/breeze` (dev dependency) to `composer.json`

@@ -82,6 +82,19 @@ test('admin can update a category', function () {
     expect($category->refresh()->name)->toBe('New Name');
 });
 
+test('unchecking active marks a category inactive', function () {
+    $category = Category::factory()->create(['is_active' => true]);
+
+    $response = $this->actingAs(admin())->put(route('admin.categories.update', $category), [
+        'name' => $category->name,
+        'is_active' => '0',
+    ]);
+
+    $response->assertRedirect(route('admin.categories.index'));
+
+    expect($category->refresh()->is_active)->toBeFalse();
+});
+
 test('admin can delete a category without children', function () {
     $category = Category::factory()->create();
 
