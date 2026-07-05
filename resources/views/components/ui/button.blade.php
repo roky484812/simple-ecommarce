@@ -28,7 +28,7 @@
         {{ $slot }}
     </a>
 @else
-    <button type="{{ $type }}" {{ $attributes->class($classes) }}>
+    <button type="{{ $type }}" {{ $attributes->except('disabled')->class($classes) }} @disabled($attributes->get('disabled'))>
         {{ $slot }}
     </button>
 @endif

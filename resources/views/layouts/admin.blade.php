@@ -95,6 +95,6 @@
         </div>
     </div>
 
-    @livewireScripts
+    @livewireScriptConfig
 </body>
 </html>

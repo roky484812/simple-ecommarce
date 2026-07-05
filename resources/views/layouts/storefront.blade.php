@@ -9,6 +9,8 @@
     @fonts
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @livewireStyles
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
 
@@ -32,7 +34,7 @@
 
                 <div class="hidden lg:flex items-center gap-6">
                     <a href="{{ route('home') }}" class="text-sm font-medium text-gray-700 hover:text-brand-700">Home</a>
-                    <a href="{{ Route::has('products.index') ? route('products.index') : '#' }}" class="text-sm font-medium text-gray-700 hover:text-brand-700">Products</a>
+                    <a href="{{ route('products.index') }}" class="text-sm font-medium text-gray-700 hover:text-brand-700">Products</a>
                 </div>
 
                 <div class="flex items-center gap-2">
@@ -91,7 +93,7 @@
         </div>
         <nav class="flex flex-col gap-1 p-4">
             <a href="{{ route('home') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Home</a>
-            <a href="{{ Route::has('products.index') ? route('products.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Products</a>
+            <a href="{{ route('products.index') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Products</a>
         </nav>
     </div>
 
@@ -111,5 +113,6 @@
         </div>
     </footer>
 
+    @livewireScriptConfig
 </body>
 </html>

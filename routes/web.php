@@ -3,11 +3,18 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Storefront\HomeController;
+use App\Http\Controllers\Storefront\ProductController as StorefrontProductController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/products', [StorefrontProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product:slug}', [StorefrontProductController::class, 'show'])->name('products.show');
+Route::get('/categories/{category:slug}', function (Category $category) {
+    return redirect()->route('products.index', ['category' => $category->slug]);
+})->name('categories.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
