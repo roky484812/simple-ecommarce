@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Storefront;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
@@ -15,6 +16,13 @@ class HomeController extends Controller
      */
     public function index(): View
     {
+        $banners = Cache::remember('storefront:home:banners', now()->addMinutes(30), function () {
+            return Banner::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->get();
+        });
+
         $featuredProducts = Cache::remember('storefront:home:featured', now()->addMinutes(15), function () {
             return Product::query()
                 ->where('is_active', true)
@@ -46,6 +54,7 @@ class HomeController extends Controller
         });
 
         return view('storefront.home', [
+            'banners' => $banners,
             'featuredProducts' => $featuredProducts,
             'newArrivals' => $newArrivals,
             'categories' => $categories,

@@ -122,6 +122,20 @@ orders ──1:N── order_status_histories
 | sort_order | smallint unsigned | not null, default 0 | |
 | created_at / updated_at | timestamp | | |
 
+### 2.6b `banners` *(Module 4)*
+
+| Column | Type | Constraints | Notes |
+|---|---|---|---|
+| id | bigint unsigned | PK | |
+| title | varchar(255) | nullable | overlay heading text |
+| subtitle | varchar(255) | nullable | overlay description |
+| image_path | varchar(255) | not null | storage disk path or full external URL |
+| link_url | varchar(255) | nullable | CTA destination (e.g. /products) |
+| link_text | varchar(100) | nullable | CTA button label (e.g. "Shop Now") |
+| sort_order | smallint unsigned | not null, default 0 | carousel order |
+| is_active | boolean | not null, default true | |
+| created_at / updated_at | timestamp | | |
+
 ### 2.7 `carts` *(Module 5)*
 
 | Column | Type | Constraints | Notes |

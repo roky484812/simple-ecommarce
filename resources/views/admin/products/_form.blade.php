@@ -36,6 +36,12 @@
                 hint="Leave blank to auto-generate from the name."
             />
 
+            <x-ui.textarea
+                label="Short Description"
+                name="short_description"
+                rows="4"
+            >{{ old('short_description', $product?->short_description) }}</x-ui.textarea>
+
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Category</legend>
                 <select name="category_id" id="category_id" class="select w-full @error('category_id') select-error @enderror" required>
@@ -113,21 +119,22 @@
         </x-ui.card>
     </div>
 
-    {{-- Description + images --}}
+    {{-- Long description + images --}}
     <div class="space-y-6">
         <x-ui.card>
-            <h3 class="font-semibold text-gray-900 mb-3">Description</h3>
+            <h3 class="font-semibold text-gray-900 mb-3">Long Description</h3>
 
             <div
-                x-data="richTextEditor('description', @js(old('description', $product?->description ?? '')))"
+                x-data="richTextEditor('long_description', @js(old('long_description', $product?->long_description ?? '')))"
             >
                 <div x-ref="editor" class="bg-white" style="min-height: 12rem;"></div>
-                <textarea x-ref="input" name="description" class="hidden"></textarea>
+                <textarea x-ref="input" name="long_description" class="hidden"></textarea>
             </div>
-            @error('description')
+            @error('long_description')
                 <p class="label text-error">{{ $message }}</p>
             @enderror
         </x-ui.card>
+
 
         <x-ui.card>
             <h3 class="font-semibold text-gray-900 mb-3">Product Images</h3>

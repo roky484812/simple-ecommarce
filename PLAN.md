@@ -22,7 +22,7 @@ features, queue-driven heavy tasks, and a live deployment.
 | Cache / Session / Queue driver | **Redis** | Required by brief; fast, supports queues, cache, session store, rate limiting |
 | Views | **Blade Components** | Required by brief |
 | CSS | Tailwind v4 (installed) | Modern, utility-first, responsive |
-| UI Kit | **Preline UI** (Tailwind-native component library) | Free, plain HTML/Tailwind markup (drops straight into Blade components), ships ready-made e-commerce blocks (product cards, carts, pricing, star ratings, breadcrumbs, off-canvas mobile nav). Alternative considered: Flowbite (also Tailwind-native, similar fit) — Preline chosen for slightly richer e-commerce block library. |
+| UI Kit | **daisyui UI** (Tailwind-native component library) | Free, plain HTML/Tailwind markup (drops straight into Blade components), ships ready-made e-commerce blocks (product cards, carts, pricing, star ratings, breadcrumbs, off-canvas mobile nav). Alternative considered: Flowbite (also Tailwind-native, similar fit) — daisyui chosen for slightly richer e-commerce block library. |
 | Auth | Laravel Breeze (Blade stack) | Fast login/register/profile scaffolding, Blade-based |
 | Queue | Redis + Laravel Queue (`horizon` optional) | Required by brief for heavy/background tasks |
 | Concurrency | `Illuminate\Support\Facades\Concurrency` | Required by brief for parallelizable read work (dashboard aggregates) |
@@ -138,7 +138,7 @@ tests, so it can be verified independently before moving to the next.
 - `.env`: `DB_CONNECTION=mysql` (+ credentials), `CACHE_STORE=redis`,
   `SESSION_DRIVER=redis`, `QUEUE_CONNECTION=redis`, `REDIS_*`
 - `composer require predis/predis` (approval needed)
-- `npm install preline` (approval needed)
+- `npm install daisyui` (approval needed)
 - Run `php artisan migrate` against MySQL to confirm connectivity
 
 **Frontend**
@@ -260,25 +260,41 @@ tests, so it can be verified independently before moving to the next.
 
 **Goal**: Public-facing browsing experience, no auth required.
 
+**Database** *(see [`DATABASE.md`](./DATABASE.md))*
+- Migration `banners`: `id, title nullable, subtitle nullable, image_path, link_url nullable, link_text nullable, sort_order smallint default 0, is_active boolean default true, timestamps`
+
 **Backend**
-- `app/Http/Controllers/Storefront/HomeController.php`: featured + new-arrival products (Redis-cached, `Cache::remember()`)
+- `app/Models/Banner.php`: `imageUrl()` accessor (handles local paths + external URLs), cache-cleared via `BannerObserver`
+- `app/Observers/BannerObserver.php`: clears `storefront:home:banners` cache on save/delete
+- `app/Http/Controllers/Storefront/HomeController.php`: featured + new-arrival products (Redis-cached, `Cache::remember()`), **banners** (Redis-cached 30 min)
 - `app/Http/Controllers/Storefront/ProductController.php`: `index` (category/price/search filters + pagination), `show`
 - Category tree cached in Redis, invalidated via model observer on `Category` save/delete
 
+**Admin — Banner Management**
+- `app/Http/Controllers/Admin/BannerController.php`: full CRUD (index/create/store/edit/update/destroy)
+- `app/Http/Requests/StoreBannerRequest.php`, `UpdateBannerRequest.php`
+- `database/factories/BannerFactory.php`
+- Admin views: `admin/banners/{index,create,edit}.blade.php`, `admin/banners/_form.blade.php`
+- Admin sidebar link: "Banners" between Products and Orders
+- Route: `Route::resource('admin/banners', Admin\BannerController::class)->except(['show'])`
+
 **Frontend**
-- `resources/views/storefront/home.blade.php` — hero banner, `<x-storefront.product-card>` grid
-- `resources/views/storefront/products/index.blade.php` — sidebar filters (collapsible on mobile), grid + pagination
-- `resources/views/storefront/products/show.blade.php` — image gallery (Preline carousel), `<x-storefront.rating-stars>` (static placeholder), add-to-cart form
-- `resources/views/components/storefront/{navbar,footer,product-card,breadcrumbs,rating-stars}.blade.php`
+- `resources/views/storefront/home.blade.php` — **image banner carousel** (Alpine.js powered, auto-advances every 5s, prev/next arrows, dot indicators, text overlay with optional CTA link), followed by category links, featured products grid, new arrivals grid
+- `resources/views/storefront/products/index.blade.php` — sidebar filters (collapsible on mobile), grid + pagination (Livewire Volt component)
+- `resources/views/storefront/products/show.blade.php` — image gallery (Alpine.js), `<x-storefront.rating-stars>` (static placeholder), add-to-cart form
+- `resources/views/components/storefront/{product-card,breadcrumbs,rating-stars}.blade.php`
 
 **Routes**
 - `GET /`, `GET /products`, `GET /products/{product:slug}`, `GET /categories/{category:slug}`
 
 **Definition of Done**
-- [ ] Pest: home page shows only `is_active` products
-- [ ] Pest: product listing filters by category/price/search correctly
-- [ ] Cache invalidates when a product is updated (assert via `Cache::has()`)
-- [ ] Fully responsive at 375/768/1280px, images lazy-loaded
+- [x] Pest: home page shows only `is_active` products
+- [x] Pest: product listing filters by category/price/search correctly
+- [x] Cache invalidates when a product is updated (assert via `Cache::has()`)
+- [x] Pest: admin can CRUD banners (create/update/delete with image upload)
+- [x] Pest: homepage shows only active banners, inactive ones hidden
+- [x] Pest: banner cache invalidates when a banner is created/updated
+- [x] Fully responsive at 375/768/1280px, images lazy-loaded
 
 ---
 
@@ -517,7 +533,7 @@ migration order in §4, not this module numbering, since `orders` depends on
 
 - Adding `predis/predis` to `composer.json`
 - Adding `laravel/breeze` (dev dependency) to `composer.json`
-- Adding `preline` to `package.json`
+- Adding `daisyui` to `package.json`
 - SSLCommerz sandbox merchant credentials (store ID/password) — to be provided by user
 - Optional: Chart.js for dashboard charts (Module 11) — CSS/SVG fallback if not approved
 - Choice of deployment target (Laravel Cloud vs Forge vs other VPS)

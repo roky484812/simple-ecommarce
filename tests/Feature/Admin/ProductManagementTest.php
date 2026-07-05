@@ -257,10 +257,11 @@ test('admin can reorder product images', function () {
     expect($product->images()->first()->id)->toBe($second->id);
 });
 
-test('product description accepts rich text HTML', function () {
+test('product long description accepts rich text HTML', function () {
     $category = Category::factory()->create();
 
-    $html = '<p>Great <strong>product</strong>.</p><ul><li>Feature one</li></ul>';
+    $shortText = 'A quick plain-text summary.';
+    $longHtml = '<p>Full <em>details</em> about the product.</p>';
 
     $this->actingAs(admin())->post(route('admin.products.store'), [
         'category_id' => $category->id,
@@ -269,12 +270,14 @@ test('product description accepts rich text HTML', function () {
         'price' => 19.99,
         'stock_qty' => 5,
         'low_stock_threshold' => 5,
-        'description' => $html,
+        'short_description' => $shortText,
+        'long_description' => $longHtml,
     ]);
 
     $this->assertDatabaseHas('products', [
         'sku' => 'SKU-RICH-001',
-        'description' => $html,
+        'short_description' => $shortText,
+        'long_description' => $longHtml,
     ]);
 });
 

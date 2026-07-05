@@ -83,8 +83,8 @@
                     @endif
                 </div>
 
-                @if ($product->description)
-                    <p class="mt-6 text-gray-600 leading-relaxed">{{ $product->description }}</p>
+                @if ($product->short_description)
+                    <p class="mt-6 text-gray-600 leading-relaxed">{{ $product->short_description }}</p>
                 @endif
 
                 <!-- Add to cart -->
@@ -111,8 +111,62 @@
                         {{ $product->isInStock() ? 'Add to cart' : 'Out of stock' }}
                     </x-ui.button>
                 </form>
+
+                <!-- Shopping instructions -->
+                <div class="join join-vertical w-full mt-6 bg-base-100">
+                    <div class="collapse collapse-arrow join-item border border-base-300">
+                        <input type="radio" name="product-instructions" autocomplete="off" checked="checked" />
+                        <div class="collapse-title font-semibold flex items-center gap-3">
+                            <span class="flex items-center justify-center w-9 h-9 rounded-full bg-brand-50 text-brand-600 shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                    <path d="M3 7h11v10H3z" /><path d="M14 10h4l3 3v4h-7z" /><circle cx="7" cy="19" r="1.5" /><circle cx="17.5" cy="19" r="1.5" />
+                                </svg>
+                            </span>
+                            Shipping information
+                        </div>
+                        <div class="collapse-content text-sm text-gray-600">
+                            Orders are processed within 1-2 business days and typically arrive within 3-7 business days depending on your location.
+                        </div>
+                    </div>
+                    <div class="collapse collapse-arrow join-item border border-base-300">
+                        <input type="radio" name="product-instructions" autocomplete="off" />
+                        <div class="collapse-title font-semibold flex items-center gap-3">
+                            <span class="flex items-center justify-center w-9 h-9 rounded-full bg-brand-50 text-brand-600 shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                    <path d="M9 15 3 9l6-6" /><path d="M3 9h11a6 6 0 0 1 6 6v3" />
+                                </svg>
+                            </span>
+                            Return &amp; refund policy
+                        </div>
+                        <div class="collapse-content text-sm text-gray-600">
+                            Not satisfied? Return the item within 7 days of delivery in its original condition for a full refund.
+                        </div>
+                    </div>
+                    <div class="collapse collapse-arrow join-item border border-base-300">
+                        <input type="radio" name="product-instructions" autocomplete="off" />
+                        <div class="collapse-title font-semibold flex items-center gap-3">
+                            <span class="flex items-center justify-center w-9 h-9 rounded-full bg-brand-50 text-brand-600 shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                    <path d="M12 3c-3 3-5 5.5-5 8.5a5 5 0 0 0 10 0c0-3-2-5.5-5-8.5z" /><path d="M9.5 13a2.5 2.5 0 0 0 2.5 2.5" />
+                                </svg>
+                            </span>
+                            Care instructions
+                        </div>
+                        <div class="collapse-content text-sm text-gray-600">
+                            Store in a cool, dry place away from direct sunlight. Handle with care to avoid damage during use.
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Full description -->
+        @if ($product->long_description)
+            <section class="mt-16">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Description</h2>
+                <div class="text-gray-600 leading-relaxed">{!! $product->long_description !!}</div>
+            </section>
+        @endif
 
         <!-- Related products -->
         @if ($relatedProducts->isNotEmpty())

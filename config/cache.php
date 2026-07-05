@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -137,6 +138,7 @@ return [
 
     'serializable_classes' => [
         Collection::class,
+        Banner::class,
         Category::class,
         Product::class,
         ProductImage::class,

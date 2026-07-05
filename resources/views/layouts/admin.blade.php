@@ -40,6 +40,7 @@
                 <a href="{{ Route::has('admin.dashboard') ? route('admin.dashboard') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Dashboard</a>
                 <a href="{{ Route::has('admin.categories.index') ? route('admin.categories.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Categories</a>
                 <a href="{{ Route::has('admin.products.index') ? route('admin.products.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Products</a>
+                <a href="{{ Route::has('admin.banners.index') ? route('admin.banners.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Banners</a>
                 <a href="{{ Route::has('admin.orders.index') ? route('admin.orders.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Orders</a>
                 <a href="{{ Route::has('admin.customers.index') ? route('admin.customers.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Customers</a>
                 <a href="{{ Route::has('admin.payments.index') ? route('admin.payments.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Payments</a>
