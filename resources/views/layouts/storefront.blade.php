@@ -34,7 +34,8 @@
                         type="button"
                         class="lg:hidden inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200"
                         aria-label="Toggle navigation"
-                        data-hs-overlay="#storefront-offcanvas-nav"
+                        x-data
+                        @click="$dispatch('open-mobile-nav')"
                     >
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16" /><path d="M4 6h16" /><path d="M4 18h16" /></svg>
                     </button>
@@ -107,26 +108,51 @@
 
     <!-- Off-canvas mobile navigation -->
     <div
-        id="storefront-offcanvas-nav"
-        class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full fixed top-0 start-0 transition-all duration-300 transform h-full max-w-xs w-full z-90 bg-white border-e border-gray-200"
+        x-data="{ navOpen: false }"
+        x-on:open-mobile-nav.window="navOpen = true"
+        x-show="navOpen"
+        x-cloak
+        class="fixed inset-0 z-90 lg:hidden"
         role="dialog"
-        tabindex="-1"
+        aria-modal="true"
     >
-        <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-            <span class="text-lg font-bold text-brand-700">{{ \App\Models\Setting::get('app_name', config('app.name', 'Laravel')) }}</span>
-            <button
-                type="button"
-                class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200"
-                aria-label="Close navigation"
-                data-hs-overlay="#storefront-offcanvas-nav"
-            >
-                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-            </button>
+        <div
+            class="absolute inset-0 bg-black/50"
+            x-show="navOpen"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="navOpen = false"
+        ></div>
+        <div
+            class="absolute top-0 start-0 h-full max-w-xs w-full bg-white border-e border-gray-200 overflow-y-auto"
+            x-show="navOpen"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="-translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full"
+        >
+            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+                <span class="text-lg font-bold text-brand-700">{{ \App\Models\Setting::get('app_name', config('app.name', 'Laravel')) }}</span>
+                <button
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200"
+                    aria-label="Close navigation"
+                    @click="navOpen = false"
+                >
+                    <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                </button>
+            </div>
+            <nav class="flex flex-col gap-1 p-4">
+                <a href="{{ route('home') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Home</a>
+                <a href="{{ route('products.index') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Products</a>
+            </nav>
         </div>
-        <nav class="flex flex-col gap-1 p-4">
-            <a href="{{ route('home') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Home</a>
-            <a href="{{ route('products.index') }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Products</a>
-        </nav>
     </div>
 
     <main>

@@ -21,7 +21,7 @@
             aria-roledescription="carousel"
             aria-label="Homepage banners"
         >
-            <div class="relative aspect-[3/1] sm:aspect-[3.5/1] lg:aspect-[4/1] bg-base-200 rounded-xl overflow-hidden">
+            <div class="relative aspect-[2/1] sm:aspect-[3/1] lg:aspect-[4/1] bg-base-200 rounded-xl overflow-hidden">
                 @foreach ($banners as $index => $banner)
                     <div
                         x-show="active === {{ $index }}"
@@ -46,17 +46,17 @@
 
                         @if ($banner->title || $banner->subtitle || $banner->link_url)
                             <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent flex items-center">
-                                <div class="px-6 sm:px-10 lg:px-12 w-full">
+                                <div class="px-4 sm:px-10 lg:px-12 w-full">
                                     <div class="max-w-lg">
                                         @if ($banner->title)
-                                            <h2 class="text-2xl sm:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">{{ $banner->title }}</h2>
+                                            <h2 class="text-lg sm:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">{{ $banner->title }}</h2>
                                         @endif
                                         @if ($banner->subtitle)
-                                            <p class="mt-2 text-sm sm:text-lg text-white/90">{{ $banner->subtitle }}</p>
+                                            <p class="mt-1 sm:mt-2 text-xs sm:text-lg text-white/90">{{ $banner->subtitle }}</p>
                                         @endif
                                         @if ($banner->link_url)
-                                            <div class="mt-4">
-                                                <x-ui.button as="a" href="{{ $banner->link_url }}" variant="primary" size="lg">
+                                            <div class="mt-2 sm:mt-4">
+                                                <x-ui.button as="a" href="{{ $banner->link_url }}" variant="primary" size="sm" class="sm:btn-lg">
                                                     {{ $banner->link_text ?? 'Shop Now' }}
                                                 </x-ui.button>
                                             </div>

@@ -19,9 +19,9 @@
                 @endphp
                 <a href="{{ route('orders.show', $order) }}" class="block">
                     <x-ui.card class="hover:border-brand-300 transition-colors">
-                        <div class="flex items-center justify-between gap-4">
-                            <div>
-                                <p class="font-semibold">{{ $order->order_number }}</p>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                            <div class="min-w-0">
+                                <p class="font-semibold truncate">{{ $order->order_number }}</p>
                                 <p class="text-sm text-base-content/70">
                                     {{ $order->created_at->format('M j, Y') }} &middot; {{ $order->items_count }} item(s)
                                 </p>

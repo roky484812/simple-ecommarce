@@ -2,12 +2,14 @@
     @foreach ($timelineSteps as $step)
         <li class="ms-6">
             <span
-                class="absolute flex items-center justify-center w-6 h-6 rounded-full -start-3 ring-4 ring-base-100 {{ $step['completed'] ? 'bg-brand-600 text-white' : 'bg-base-200 text-base-content/40' }}"
+                class="absolute flex items-center justify-center w-7 h-7 rounded-full -start-3.5 ring-4 ring-base-100 {{ $step['completed'] ? 'bg-green-500 text-white' : 'bg-base-200 text-base-content/40' }}"
             >
                 @if ($step['completed'])
-                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 6 9 17l-5-5" />
                     </svg>
+                @else
+                    <span class="w-2.5 h-2.5 rounded-full bg-base-content/20"></span>
                 @endif
             </span>
 

@@ -14,11 +14,25 @@
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
 
-    <div class="flex min-h-screen">
-        <!-- Sidebar (off-canvas below lg) -->
+    <div class="flex min-h-screen" x-data="{ sidebarOpen: false }" x-on:open-admin-sidebar.window="sidebarOpen = true">
+        <!-- Sidebar backdrop (mobile) -->
+        <div
+            x-show="sidebarOpen"
+            x-cloak
+            class="fixed inset-0 z-80 bg-black/50 lg:hidden"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="sidebarOpen = false"
+        ></div>
+
+        <!-- Sidebar -->
         <aside
-            id="admin-sidebar"
-            class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full lg:translate-x-0 fixed lg:sticky top-0 start-0 z-90 h-full lg:h-screen w-64 shrink-0 bg-gray-900 text-gray-100 transition-all duration-300 transform flex flex-col"
+            :class="sidebarOpen ? 'max-lg:translate-x-0' : 'max-lg:-translate-x-full'"
+            class="max-lg:-translate-x-full fixed lg:sticky top-0 start-0 z-90 h-full lg:h-screen w-64 shrink-0 bg-gray-900 text-gray-100 transition-transform duration-300 flex flex-col"
             role="dialog"
             tabindex="-1"
         >
@@ -36,7 +50,7 @@
                     type="button"
                     class="lg:hidden inline-flex items-center justify-center rounded-lg p-2 text-gray-300 hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-700"
                     aria-label="Close sidebar"
-                    data-hs-overlay="#admin-sidebar"
+                    @click="sidebarOpen = false"
                 >
                     <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
                 </button>
@@ -74,7 +88,7 @@
                         type="button"
                         class="lg:hidden inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200"
                         aria-label="Toggle sidebar"
-                        data-hs-overlay="#admin-sidebar"
+                        @click="$dispatch('open-admin-sidebar')"
                     >
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16" /><path d="M4 6h16" /><path d="M4 18h16" /></svg>
                     </button>

@@ -72,6 +72,21 @@ new class extends Component
     }
 
     /**
+     * Sync any pending quantity changes and redirect to checkout.
+     */
+    public function proceedToCheckout(): void
+    {
+        $cartService = app(CartService::class);
+
+        foreach ($this->quantities as $lineId => $qty) {
+            $qty = max(1, (int) $qty);
+            $cartService->update(auth()->user(), session()->getId(), $lineId, $qty);
+        }
+
+        $this->redirect(route('checkout.show'));
+    }
+
+    /**
      * Rebuild the `$quantities` map from the current cart lines.
      */
     private function syncQuantitiesFromLines(CartService $cartService): void
@@ -96,46 +111,50 @@ new class extends Component
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-4">
                 @foreach ($this->lines as $line)
-                    <div class="flex items-center gap-4 p-4 rounded-xl border border-base-200 bg-base-100" wire:key="cart-line-{{ $line['id'] }}">
-                        <a href="{{ route('products.show', $line['product']) }}" class="w-20 h-20 rounded-lg bg-base-200 overflow-hidden shrink-0">
-                            @if ($line['product']->images->isNotEmpty())
-                                <img
-                                    src="{{ $line['product']->images->first()->url() }}"
-                                    alt="{{ $line['product']->name }}"
-                                    loading="lazy"
-                                    class="w-full h-full object-cover"
-                                >
-                            @endif
-                        </a>
-
-                        <div class="flex-1 min-w-0">
-                            <a href="{{ route('products.show', $line['product']) }}" class="font-medium text-gray-900 hover:text-brand-700 line-clamp-2">
-                                {{ $line['product']->name }}
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-xl border border-base-200 bg-base-100" wire:key="cart-line-{{ $line['id'] }}">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <a href="{{ route('products.show', $line['product']) }}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg bg-base-200 overflow-hidden shrink-0">
+                                @if ($line['product']->images->isNotEmpty())
+                                    <img
+                                        src="{{ $line['product']->images->first()->url() }}"
+                                        alt="{{ $line['product']->name }}"
+                                        loading="lazy"
+                                        class="w-full h-full object-cover"
+                                    >
+                                @endif
                             </a>
-                            <p class="text-sm text-gray-500 mt-1"><x-ui.money :value="$line['price_snapshot']" /> each</p>
+
+                            <div class="flex-1 min-w-0">
+                                <a href="{{ route('products.show', $line['product']) }}" class="font-medium text-gray-900 hover:text-brand-700 line-clamp-2 text-sm sm:text-base">
+                                    {{ $line['product']->name }}
+                                </a>
+                                <p class="text-sm text-gray-500 mt-1"><x-ui.money :value="$line['price_snapshot']" /> each</p>
+                            </div>
                         </div>
 
-                        <div wire:loading.class="opacity-50" wire:target="quantities.{{ $line['id'] }}">
-                            <input
-                                type="number"
-                                wire:model.live.debounce.500ms="quantities.{{ $line['id'] }}"
-                                min="0"
-                                max="{{ $line['product']->stock_qty }}"
-                                class="input input-sm w-16"
-                                aria-label="Quantity for {{ $line['product']->name }}"
+                        <div class="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+                            <div wire:loading.class="opacity-50" wire:target="quantities.{{ $line['id'] }}">
+                                <input
+                                    type="number"
+                                    wire:model.live.blur="quantities.{{ $line['id'] }}"
+                                    min="1"
+                                    max="{{ $line['product']->stock_qty }}"
+                                    class="input input-sm w-16"
+                                    aria-label="Quantity for {{ $line['product']->name }}"
+                                >
+                            </div>
+
+                            <p class="font-semibold text-gray-900 w-20 sm:w-24 text-right shrink-0"><x-ui.money :value="$line['line_total']" /></p>
+
+                            <button
+                                type="button"
+                                wire:click="remove('{{ $line['id'] }}')"
+                                class="p-2 rounded-lg text-gray-400 hover:text-error hover:bg-red-50"
+                                aria-label="Remove {{ $line['product']->name }}"
                             >
+                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6" /></svg>
+                            </button>
                         </div>
-
-                        <button
-                            type="button"
-                            wire:click="remove('{{ $line['id'] }}')"
-                            class="p-2 rounded-lg text-gray-400 hover:text-error hover:bg-red-50"
-                            aria-label="Remove {{ $line['product']->name }}"
-                        >
-                            <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6" /></svg>
-                        </button>
-
-                        <p class="font-semibold text-gray-900 w-24 text-right shrink-0"><x-ui.money :value="$line['line_total']" /></p>
                     </div>
                 @endforeach
             </div>
@@ -157,11 +176,11 @@ new class extends Component
                     </div>
 
                     <x-ui.button
-                        as="a"
-                        :href="Route::has('checkout.show') ? route('checkout.show') : '#'"
+                        type="button"
                         variant="primary"
                         size="lg"
                         class="w-full"
+                        wire:click="proceedToCheckout"
                     >
                         Proceed to checkout
                     </x-ui.button>

@@ -133,8 +133,27 @@ new class extends Component
             role="dialog"
             aria-modal="true"
         >
-            <div class="absolute inset-0 bg-black/50" @click="filtersOpen = false"></div>
-            <div class="absolute top-0 start-0 h-full max-w-xs w-full bg-white overflow-y-auto">
+            <div
+                class="absolute inset-0 bg-black/50"
+                x-show="filtersOpen"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                @click="filtersOpen = false"
+            ></div>
+            <div
+                class="absolute top-0 start-0 h-full max-w-xs w-full bg-white overflow-y-auto"
+                x-show="filtersOpen"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="-translate-x-full"
+                x-transition:enter-end="translate-x-0"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="translate-x-0"
+                x-transition:leave-end="-translate-x-full"
+            >
                 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
                     <span class="text-lg font-bold text-gray-900">Filters</span>
                     <button
