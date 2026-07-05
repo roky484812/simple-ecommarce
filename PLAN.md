@@ -130,7 +130,7 @@ tests, so it can be verified independently before moving to the next.
 
 **Frontend**
 - `resources/css/app.css`: Tailwind v4 theme tokens (colors, font) for the store brand
-- `resources/js/app.js`: import `preline/preline` and initialize on `DOMContentLoaded`
+- `resources/js/app.js`: import `daisyui` and initialize on `DOMContentLoaded`
 - Blade component library (`resources/views/components/ui/`):
   `button.blade.php`, `input.blade.php`, `select.blade.php`, `textarea.blade.php`,
   `card.blade.php`, `badge.blade.php`, `modal.blade.php`, `alert.blade.php`,
