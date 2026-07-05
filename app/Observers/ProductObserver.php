@@ -30,5 +30,6 @@ class ProductObserver
     {
         Cache::forget('storefront:home:featured');
         Cache::forget('storefront:home:new-arrivals');
+        Cache::forget('admin:dashboard');
     }
 }

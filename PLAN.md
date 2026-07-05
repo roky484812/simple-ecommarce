@@ -491,7 +491,7 @@ migration order in §4, not this module numbering, since `orders` depends on
 
 ---
 
-## Module 11 — Admin Dashboard (Concurrency + Redis Cache)
+## Module 11 — Admin Dashboard (Concurrency + Cache)
 
 **Goal**: At-a-glance sales/stock overview, demonstrating required Concurrency usage.
 
@@ -509,10 +509,10 @@ migration order in §4, not this module numbering, since `orders` depends on
 - `GET /admin` (dashboard as admin home)
 
 **Definition of Done**
-- [ ] Pest: dashboard data matches direct DB aggregates
-- [ ] Verify (manually or via a timing assertion) that `Concurrency::run` is actually used, not sequential calls
-- [ ] Cache invalidates after a new order/product change
-- [ ] Responsive stat grid (stacks on mobile)
+- [x] Pest: dashboard data matches direct DB aggregates
+- [x] Verify (manually or via a timing assertion) that `Concurrency::run` is actually used, not sequential calls
+- [x] Cache invalidates after a new order/product change
+- [x] Responsive stat grid (stacks on mobile)
 
 ---
 
