@@ -72,6 +72,14 @@
             </header>
 
             <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                @if (session('success'))
+                    <x-ui.alert variant="success" class="mb-4">{{ session('success') }}</x-ui.alert>
+                @endif
+
+                @if (session('error'))
+                    <x-ui.alert variant="error" class="mb-4">{{ session('error') }}</x-ui.alert>
+                @endif
+
                 @yield('content')
             </main>
         </div>

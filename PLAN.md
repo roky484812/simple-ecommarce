@@ -203,9 +203,12 @@ tests, so it can be verified independently before moving to the next.
 - `Route::resource('admin/categories', Admin\CategoryController::class)`
 
 **Definition of Done**
-- [ ] Pest feature test: admin can create/update/delete a category
-- [ ] Pest: deleting a parent with children is blocked or cascades (decide + document behavior)
-- [ ] Responsive table (stacks to cards on mobile)
+- [x] Pest feature test: admin can create/update/delete a category
+- [x] Pest: deleting a parent with children is blocked or cascades (decide + document behavior)
+      → **Decision: blocked.** `Admin\CategoryController::destroy()` refuses to delete a
+      category that still has children (flash error message); children must be
+      deleted/reassigned first.
+- [x] Responsive table (stacks to cards on mobile)
 
 ---
 
