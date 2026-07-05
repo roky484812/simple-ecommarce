@@ -18,11 +18,11 @@
         <!-- Sidebar (off-canvas below lg) -->
         <aside
             id="admin-sidebar"
-            class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full lg:translate-x-0 fixed lg:static top-0 start-0 z-90 h-full lg:h-auto w-64 shrink-0 bg-gray-900 text-gray-100 transition-all duration-300 transform"
+            class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full lg:translate-x-0 fixed lg:sticky top-0 start-0 z-90 h-full lg:h-screen w-64 shrink-0 bg-gray-900 text-gray-100 transition-all duration-300 transform flex flex-col"
             role="dialog"
             tabindex="-1"
         >
-            <div class="flex items-center justify-between px-4 py-4 border-b border-gray-800">
+            <div class="flex items-center justify-between px-4 py-4 border-b border-gray-800 shrink-0">
                 <a href="{{ Route::has('admin.dashboard') ? route('admin.dashboard') : '#' }}" class="text-lg font-bold text-white">
                     {{ config('app.name', 'Laravel') }} <span class="text-gray-400 font-normal">Admin</span>
                 </a>
@@ -36,7 +36,7 @@
                 </button>
             </div>
 
-            <nav class="flex flex-col gap-1 p-4">
+            <nav class="flex flex-col gap-1 p-4 overflow-y-auto flex-1">
                 <a href="{{ Route::has('admin.dashboard') ? route('admin.dashboard') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Dashboard</a>
                 <a href="{{ Route::has('admin.categories.index') ? route('admin.categories.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Categories</a>
                 <a href="{{ Route::has('admin.products.index') ? route('admin.products.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Products</a>
@@ -44,6 +44,18 @@
                 <a href="{{ Route::has('admin.customers.index') ? route('admin.customers.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Customers</a>
                 <a href="{{ Route::has('admin.payments.index') ? route('admin.payments.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Payments</a>
             </nav>
+
+            @auth
+                <div class="shrink-0 p-4 border-t border-gray-800">
+                    <form method="POST" action="{{ Route::has('logout') ? route('logout') : '#' }}">
+                        @csrf
+                        <button type="submit" class="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800 text-left">
+                            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
+                            Log out
+                        </button>
+                    </form>
+                </div>
+            @endauth
         </aside>
 
         <div class="flex-1 flex flex-col min-w-0">
@@ -64,10 +76,6 @@
                     <div class="flex items-center gap-3">
                         @auth
                             <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
-                            <form method="POST" action="{{ Route::has('logout') ? route('logout') : '#' }}">
-                                @csrf
-                                <x-ui.button type="submit" variant="ghost" size="sm">Log out</x-ui.button>
-                            </form>
                         @endauth
                     </div>
                 </div>
