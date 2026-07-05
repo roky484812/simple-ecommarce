@@ -62,6 +62,16 @@ class User extends Authenticatable
     }
 
     /**
+     * The orders this user has placed.
+     *
+     * @return HasMany<Order, $this>
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
      * The public URL for this user's avatar, falling back to a generated
      * placeholder (initials) when no avatar has been uploaded.
      */

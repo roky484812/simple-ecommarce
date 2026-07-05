@@ -24,7 +24,7 @@ class ProfileController extends Controller
         return view('storefront.profile.edit', [
             'user' => $user,
             'addresses' => $user->addresses,
-            'recentOrders' => collect(),
+            'recentOrders' => $user->orders()->withCount('items')->latest()->limit(5)->get(),
         ]);
     }
 
