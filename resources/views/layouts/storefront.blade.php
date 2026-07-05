@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title', config('app.name', 'Laravel'))</title>
+    <title>@yield('title', \App\Models\Setting::get('app_name', config('app.name', 'Laravel')))</title>
 
     @fonts
 
@@ -39,8 +39,13 @@
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16" /><path d="M4 6h16" /><path d="M4 18h16" /></svg>
                     </button>
 
-                    <a href="{{ route('home') }}" class="text-xl font-bold text-brand-700">
-                        {{ config('app.name', 'Laravel') }}
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 text-xl font-bold text-brand-700">
+                        @php $appLogo = \App\Models\Setting::get('app_logo'); @endphp
+                        @if ($appLogo)
+                            <img src="{{ Storage::url($appLogo) }}" alt="{{ \App\Models\Setting::get('app_name', config('app.name', 'Laravel')) }}" class="h-8 w-auto" />
+                        @else
+                            {{ \App\Models\Setting::get('app_name', config('app.name', 'Laravel')) }}
+                        @endif
                     </a>
                 </div>
 
@@ -108,7 +113,7 @@
         tabindex="-1"
     >
         <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-            <span class="text-lg font-bold text-brand-700">{{ config('app.name', 'Laravel') }}</span>
+            <span class="text-lg font-bold text-brand-700">{{ \App\Models\Setting::get('app_name', config('app.name', 'Laravel')) }}</span>
             <button
                 type="button"
                 class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200"
@@ -151,7 +156,7 @@
                 @yield('footer')
             @else
                 <p class="text-sm text-gray-500 text-center">
-                    &copy; {{ now()->year }} {{ config('app.name', 'Laravel') }}. All rights reserved.
+                    &copy; {{ now()->year }} {{ \App\Models\Setting::get('app_name', config('app.name', 'Laravel')) }}. All rights reserved.
                 </p>
             @endif
         </div>

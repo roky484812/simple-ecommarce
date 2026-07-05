@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ImpersonationController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Storefront\CartController;
 use App\Http\Controllers\Storefront\CheckoutController;
 use App\Http\Controllers\Storefront\HomeController;
@@ -92,6 +93,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
 
     Route::resource('payments', AdminPaymentController::class)->only(['index', 'show']);
+
+    Route::get('settings', [SettingController::class, 'edit'])->name('settings.edit');
+    Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
 });
 
 require __DIR__.'/auth.php';

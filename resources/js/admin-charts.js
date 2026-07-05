@@ -36,7 +36,7 @@ export function ordersByStatusChart(labels, counts, quantities, amounts) {
                         const amount = Number(amounts[seriesIndex]).toLocaleString();
 
                         return `
-                            <div class="px-3 py-2 text-sm">
+                            <div class="px-3 py-2 text-sm bg-white text-gray-900 rounded shadow-lg border border-gray-200">
                                 <div class="font-semibold mb-1">${label}</div>
                                 <div>Orders: ${count}</div>
                                 <div>Quantity: ${qty}</div>
@@ -103,7 +103,7 @@ export function topProductsChart(labels, series, amounts) {
                         const amount = Number(amounts[dataPointIndex]).toLocaleString();
 
                         return `
-                            <div class="px-3 py-2 text-sm">
+                            <div class="px-3 py-2 text-sm bg-white text-gray-900 rounded shadow-lg border border-gray-200">
                                 <div class="font-semibold mb-1">${label}</div>
                                 <div>Quantity sold: ${qty}</div>
                                 <div>Amount: ৳${amount}</div>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title', 'Admin') - {{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title', 'Admin') - {{ \App\Models\Setting::get('app_name', config('app.name', 'Laravel')) }}</title>
 
     @fonts
 
@@ -23,8 +23,14 @@
             tabindex="-1"
         >
             <div class="flex items-center justify-between px-4 py-4 border-b border-gray-800 shrink-0">
-                <a href="{{ Route::has('admin.dashboard') ? route('admin.dashboard') : '#' }}" class="text-lg font-bold text-white">
-                    {{ config('app.name', 'Laravel') }} <span class="text-gray-400 font-normal">Admin</span>
+                <a href="{{ Route::has('admin.dashboard') ? route('admin.dashboard') : '#' }}" class="flex items-center gap-2 text-lg font-bold text-white">
+                    @php $appLogo = \App\Models\Setting::get('app_logo'); @endphp
+                    @if ($appLogo)
+                        <img src="{{ Storage::url($appLogo) }}" alt="{{ \App\Models\Setting::get('app_name', config('app.name', 'Laravel')) }}" class="h-8 w-auto" />
+                    @else
+                        {{ \App\Models\Setting::get('app_name', config('app.name', 'Laravel')) }}
+                    @endif
+                    <span class="text-gray-400 font-normal">Admin</span>
                 </a>
                 <button
                     type="button"
@@ -44,6 +50,7 @@
                 <a href="{{ Route::has('admin.orders.index') ? route('admin.orders.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Orders</a>
                 <a href="{{ Route::has('admin.customers.index') ? route('admin.customers.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Customers</a>
                 <a href="{{ Route::has('admin.payments.index') ? route('admin.payments.index') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Payments</a>
+                <a href="{{ Route::has('admin.settings.edit') ? route('admin.settings.edit') : '#' }}" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-800">Settings</a>
             </nav>
 
             @auth
