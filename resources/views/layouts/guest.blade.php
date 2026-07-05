@@ -27,9 +27,23 @@
 
                 <div class="flex items-center gap-2">
                     @auth
-                        <a href="{{ Route::has('profile.edit') ? route('profile.edit') : '#' }}" class="text-sm font-medium text-gray-700 hover:text-primary px-2">
-                            {{ Auth::user()->name }}
-                        </a>
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
+                                {{ Auth::user()->name }}
+                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow-sm border border-base-200">
+                                <li><a href="{{ route('profile.edit') }}">Profile</a></li>
+                                <li>
+                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-guest').submit();">Log Out</a>
+                                </li>
+                            </ul>
+                            <form id="logout-form-guest" method="POST" action="{{ route('logout') }}" class="hidden">
+                                @csrf
+                            </form>
+                        </div>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-ghost btn-sm">Log in</a>
                         <a href="{{ route('register') }}" class="btn btn-primary btn-sm">Register</a>
