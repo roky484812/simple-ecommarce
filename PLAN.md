@@ -361,9 +361,9 @@ tests, so it can be verified independently before moving to the next.
 - `GET/PATCH /profile`, `GET/POST/PATCH/DELETE /profile/addresses/*`
 
 **Definition of Done**
-- [ ] Pest: user can update name/phone/avatar (avatar stored, old one cleaned up on replace)
-- [ ] Pest: user can CRUD addresses, only one `is_default` at a time
-- [ ] Responsive tabs (dropdown/accordion on mobile if needed)
+- [x] Pest: user can update name/phone/avatar (avatar stored, old one cleaned up on replace)
+- [x] Pest: user can CRUD addresses, only one `is_default` at a time
+- [x] Responsive tabs (dropdown/accordion on mobile if needed)
 
 ---
 
