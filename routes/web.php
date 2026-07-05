@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ImpersonationController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Storefront\CartController;
 use App\Http\Controllers\Storefront\CheckoutController;
@@ -32,6 +35,8 @@ Route::patch('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.
 Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
 
 Route::middleware('auth')->group(function () {
+    Route::post('/impersonate/stop', [ImpersonationController::class, 'stop'])->name('impersonate.stop');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -78,6 +83,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('categories', CategoryController::class)->except(['show']);
     Route::resource('products', ProductController::class)->except(['show']);
     Route::resource('banners', BannerController::class)->except(['show']);
+
+    Route::resource('customers', CustomerController::class)->only(['index', 'show']);
+    Route::post('customers/{user}/toggle-block', [CustomerController::class, 'toggleBlock'])->name('customers.toggle-block');
+    Route::post('customers/{user}/impersonate', [ImpersonationController::class, 'start'])->name('customers.impersonate');
+
+    Route::resource('orders', AdminOrderController::class)->only(['index', 'show']);
+    Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
 });
 
 require __DIR__.'/auth.php';

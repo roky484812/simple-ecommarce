@@ -14,6 +14,18 @@
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
 
+    @if (session('impersonator_id'))
+        <div class="bg-yellow-400 text-yellow-950 text-sm font-medium">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-3">
+                <span>You are logged in as {{ Auth::user()->name }} (impersonating).</span>
+                <form method="POST" action="{{ route('impersonate.stop') }}">
+                    @csrf
+                    <button type="submit" class="underline hover:no-underline">Return to admin account</button>
+                </form>
+            </div>
+        </div>
+    @endif
+
     <header class="sticky top-0 z-50 bg-white border-b border-gray-200">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">

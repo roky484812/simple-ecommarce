@@ -434,24 +434,39 @@ migration order in §4, not this module numbering, since `orders` depends on
 **Goal**: Admin manages customers and order lifecycle.
 
 **Backend**
-- `app/Http/Controllers/Admin/CustomerController.php`: `index` (search), `show` (orders+addresses), `toggleBlock`
+- `app/Http/Controllers/Admin/CustomerController.php`: `index` (search), `show` (orders+addresses+profile), `toggleBlock`
 - `app/Http/Controllers/Admin/OrderController.php`: `index` (filter by status), `show`, `updateStatus`
   (writes `order_status_histories`, dispatches a "status changed" notification job)
+- `app/Http/Controllers/Admin/ImpersonationController.php`: `start` (admin logs in as a
+  customer — refuses other admins and blocked customers, stores `impersonator_id` in the
+  session, logs the action), `stop` (restores the admin's own session from
+  `impersonator_id`, aborts 403 if none present)
 - `users.is_blocked` column already exists from Module 1's migration (per
   `DATABASE.md` §3) — this module implements the login-blocking *behavior* only
 
 **Frontend**
-- `resources/views/admin/customers/{index,show}.blade.php`
+- `resources/views/admin/customers/{index,show}.blade.php` — avatar thumbnail (via
+  `User::avatarUrl()`), profile card (bio/date of birth/gender/joined date) on the show page
 - `resources/views/admin/orders/{index,show}.blade.php` — status dropdown with confirm modal
+- "Log in as this user" button on the customer show page (hidden for blocked customers)
+- Impersonation banner on `resources/views/layouts/storefront.blade.php` — shown whenever
+  `session('impersonator_id')` is set, with a "Return to admin account" action
 
 **Routes**
 - `Route::resource('admin/customers', ...)->only(['index','show'])` + `POST admin/customers/{user}/toggle-block`
+- `POST admin/customers/{user}/impersonate` (admin-only, starts impersonation)
+- `POST /impersonate/stop` (plain `auth` middleware — the caller is the impersonated
+  customer, not an admin, while this route is hit)
 - `Route::resource('admin/orders', ...)->only(['index','show'])` + `PATCH admin/orders/{order}/status`
 
 **Definition of Done**
-- [ ] Pest: admin can change order status, history row created, notification job dispatched
-- [ ] Pest: blocked customer cannot log in
-- [ ] Responsive tables
+- [x] Pest: admin can change order status, history row created, notification job dispatched
+- [x] Pest: blocked customer cannot log in
+- [x] Pest: customer detail page shows avatar (with generated placeholder fallback), bio, gender, date of birth
+- [x] Pest: admin can start impersonating a customer and is authenticated as them
+- [x] Pest: admin cannot impersonate another admin or a blocked customer
+- [x] Pest: admin can stop impersonating and return to their own account; stopping without an active impersonation session is forbidden
+- [x] Responsive tables
 
 ---
 
