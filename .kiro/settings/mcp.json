@@ -7,6 +7,14 @@
                 "boost:mcp"
             ],
             "cwd": "/home/roky/Desktop/ecommarce"
+        },
+        "daisyui-github": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "mcp-remote",
+                "https://gitmcp.io/saadeghi/daisyui"
+            ]
         }
     }
 }
