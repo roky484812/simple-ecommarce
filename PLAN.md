@@ -486,8 +486,8 @@ migration order in §4, not this module numbering, since `orders` depends on
 - `Route::resource('admin/payments', ...)->only(['index','show'])`
 
 **Definition of Done**
-- [ ] Pest: filters return correct subset
-- [ ] Responsive table
+- [x] Pest: filters return correct subset
+- [x] Responsive table
 
 ---
 
