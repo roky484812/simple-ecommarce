@@ -16,6 +16,18 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => EnsureUserIsAdmin::class,
         ]);
+
+        // Note: the payment/* POST callbacks below also fully exclude the
+        // PreventRequestForgery middleware in routes/web.php (via
+        // Route::withoutMiddleware), since SSLCommerz's cross-site POST has
+        // no session to validate a token against. This `except` entry is
+        // kept as a documented fallback/defense-in-depth.
+        $middleware->validateCsrfTokens(except: [
+            'payment/ipn',
+            'payment/success',
+            'payment/fail',
+            'payment/cancel',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
