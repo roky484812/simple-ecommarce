@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+@php $navCategories = \App\Models\Category::navigationTree(); @endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
 <head>
     <meta charset="utf-8">

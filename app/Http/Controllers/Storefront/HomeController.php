@@ -44,14 +44,7 @@ class HomeController extends Controller
                 ->get();
         });
 
-        $categories = Cache::remember('storefront:categories:tree', now()->addHour(), function () {
-            return Category::query()
-                ->whereNull('parent_id')
-                ->where('is_active', true)
-                ->with(['children' => fn ($query) => $query->where('is_active', true)])
-                ->orderBy('name')
-                ->get();
-        });
+        $categories = Category::navigationTree();
 
         return view('storefront.home', [
             'banners' => $banners,

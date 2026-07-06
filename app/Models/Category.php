@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 #[Fillable(['name', 'slug', 'parent_id', 'is_active'])]
@@ -93,6 +95,24 @@ class Category extends Model
     public function hasDescendants(): bool
     {
         return $this->children()->exists();
+    }
+
+    /**
+     * Get the active top-level categories with their active children,
+     * cached for an hour. Used to render storefront navigation menus.
+     *
+     * @return Collection<int, Category>
+     */
+    public static function navigationTree(): Collection
+    {
+        return Cache::remember('storefront:categories:tree', now()->addHour(), function () {
+            return static::query()
+                ->whereNull('parent_id')
+                ->where('is_active', true)
+                ->with(['children' => fn ($query) => $query->where('is_active', true)])
+                ->orderBy('name')
+                ->get();
+        });
     }
 
     /**

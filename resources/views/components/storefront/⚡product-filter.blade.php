@@ -3,7 +3,6 @@
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -93,14 +92,7 @@ new class extends Component
 
         $products = $query->paginate(12);
 
-        $categories = Cache::remember('storefront:categories:tree', now()->addHour(), function () {
-            return Category::query()
-                ->whereNull('parent_id')
-                ->where('is_active', true)
-                ->with(['children' => fn ($q) => $q->where('is_active', true)])
-                ->orderBy('name')
-                ->get();
-        });
+        $categories = Category::navigationTree();
 
         $view->with([
             'products' => $products,
