@@ -20,6 +20,7 @@
                 name="email"
                 value="{{ old('email') }}"
                 class="input w-full @error('email') input-error @enderror"
+                placeholder="you@example.com"
                 required
                 autofocus
                 autocomplete="username"
@@ -37,6 +38,7 @@
                 type="password"
                 name="password"
                 class="input w-full @error('password') input-error @enderror"
+                placeholder="Enter your password"
                 required
                 autocomplete="current-password"
             />

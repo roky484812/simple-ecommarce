@@ -24,6 +24,7 @@
                 name="email"
                 value="{{ old('email') }}"
                 class="input w-full @error('email') input-error @enderror"
+                placeholder="you@example.com"
                 required
                 autofocus
             />

@@ -13,6 +13,7 @@
                 name="name"
                 value="{{ old('name') }}"
                 class="input w-full @error('name') input-error @enderror"
+                placeholder="John Doe"
                 required
                 autofocus
                 autocomplete="name"
@@ -31,6 +32,7 @@
                 name="email"
                 value="{{ old('email') }}"
                 class="input w-full @error('email') input-error @enderror"
+                placeholder="you@example.com"
                 required
                 autocomplete="username"
             />
@@ -47,6 +49,7 @@
                 type="password"
                 name="password"
                 class="input w-full @error('password') input-error @enderror"
+                placeholder="Create a password"
                 required
                 autocomplete="new-password"
             />
@@ -63,6 +66,7 @@
                 type="password"
                 name="password_confirmation"
                 class="input w-full"
+                placeholder="Re-enter your password"
                 required
                 autocomplete="new-password"
             />

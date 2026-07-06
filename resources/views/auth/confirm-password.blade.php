@@ -16,6 +16,7 @@
                 type="password"
                 name="password"
                 class="input w-full @error('password') input-error @enderror"
+                placeholder="Enter your password"
                 required
                 autocomplete="current-password"
             />

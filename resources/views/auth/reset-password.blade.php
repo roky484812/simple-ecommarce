@@ -15,6 +15,7 @@
                 name="email"
                 value="{{ old('email', $request->email) }}"
                 class="input w-full @error('email') input-error @enderror"
+                placeholder="you@example.com"
                 required
                 autofocus
                 autocomplete="username"
@@ -32,6 +33,7 @@
                 type="password"
                 name="password"
                 class="input w-full @error('password') input-error @enderror"
+                placeholder="Create a new password"
                 required
                 autocomplete="new-password"
             />
@@ -48,6 +50,7 @@
                 type="password"
                 name="password_confirmation"
                 class="input w-full"
+                placeholder="Re-enter your new password"
                 required
                 autocomplete="new-password"
             />
