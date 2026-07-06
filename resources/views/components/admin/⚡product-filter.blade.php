@@ -129,7 +129,7 @@ new class extends Component
                 </select>
             </fieldset>
 
-            <div class="flex gap-2">
+            <div class="sm:col-span-2 lg:col-span-1 flex gap-2">
                 @if ($search || $categoryId || $stockStatus || $isActive !== '')
                     <x-ui.button type="button" wire:click="resetFilters" variant="ghost" class="flex-1">
                         Reset
@@ -139,7 +139,17 @@ new class extends Component
         </div>
     </x-ui.card>
 
-    <x-ui.card class="p-0 overflow-hidden">
+    <!-- Mobile card list -->
+    <div class="sm:hidden space-y-3">
+        @forelse ($products as $product)
+            <x-admin.product-card :product="$product" />
+        @empty
+            <x-ui.card class="text-center text-gray-500 py-8">No products found.</x-ui.card>
+        @endforelse
+    </div>
+
+    <!-- Desktop table -->
+    <x-ui.card class="hidden sm:block p-0 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="table">
                 <thead>
